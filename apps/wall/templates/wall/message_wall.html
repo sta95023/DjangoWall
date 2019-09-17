@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Messages</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <div class="col">
+            <a class="float-right" href="/logout">Log Out</a> <br><br>
+            <h4 class="float-left">Coding Dojo Wall</h4> <h4 class="float-right">Welcome {{user.first_name}}!</h4><br>
+            <br><br>
+            <form action="/message_wall" method="POST"> {% csrf_token %}
+                <div class="form-group">
+                    <label for="messages">Post a Message</label>
+                    <textarea class="form-control" rows="6" name="user_messages" id="messages"></textarea>
+                    <br>
+                    <button type="submit" class="btn btn-primary float-right">Post a Message</button>
+                </div>
+                </form>
+                <div>
+                    {%for m in all_messages%}
+                    <p> {{user.first_name}} {{user.last_name}} - {{m.created_at}} </p>
+                    <p> {{m.messages}} </p>
+                    {%for c in m.comments.all %}
+                    <p> {{user.first_name}} {{user.last_name}} - {{c.created_at}} </p>
+                    <p> {{c.comments}} </p>
+                    {%endfor%}
+                    <form action="/comments_all" method="POST"> {% csrf_token %}
+                        <div class="form-group">
+                            <label for="comment">Post a Comment</label><br>
+                            <textarea class="form-control" rows="3" name="user_comments" id="user_comments"></textarea>
+                            <br>
+                            <input type="hidden" name="message" value="{{m.id}}">
+                            <button type="submit" class="btn btn-success float-right">Post a Comment</button>
+                        </div>
+                    </form>
+                    {%endfor%}
+                </div>
+        </div>
+    </div>
+</body>
+</html>
